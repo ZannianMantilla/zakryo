@@ -1,31 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const elevenLabsApiKey = "sk_523a264e1da67056d640b6c24ebb01a3f3b44bf8c03202cf";
+    const elevenLabsApiKey = "sk_13488429e5122e9b99164d79d05d009731689aa55697f48b";
     const voiceId = "15bJsujCI3tcDWeoZsQP"; // Voz en español latino
-
-    const loadingOverlay = document.createElement("div");
-    loadingOverlay.id = "loading-overlay";
-    loadingOverlay.style.position = "fixed";
-    loadingOverlay.style.top = "0";
-    loadingOverlay.style.left = "0";
-    loadingOverlay.style.width = "100%";
-    loadingOverlay.style.height = "100%";
-    loadingOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-    loadingOverlay.style.color = "#fff";
-    loadingOverlay.style.display = "flex";
-    loadingOverlay.style.justifyContent = "center";
-    loadingOverlay.style.alignItems = "center";
-    loadingOverlay.style.fontSize = "24px";
-    loadingOverlay.style.zIndex = "1000";
-    loadingOverlay.textContent = "Cargando...";
-    document.body.appendChild(loadingOverlay);
 
     /**
      * Función para reproducir texto mediante Eleven Labs.
      * @param {string} message - Texto que será convertido a voz.
+     * @param {HTMLElement} messageElement - Elemento del mensaje en el DOM que mostrará el estado "Cargando...".
      * @param {object} settings - Configuración de la voz (estabilidad, similitud).
      */
-    async function playVoice(message, settings = { stability: 0.5, similarity_boost: 0.75 }) {
-        loadingOverlay.style.display = "flex"; // Mostrar el estado de carga
+    async function playVoice(message, messageElement, settings = { stability: 0.5, similarity_boost: 0.75 }) {
+        messageElement.textContent = "Cargando..."; // Mostrar estado inicial
+
         const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
             method: "POST",
             headers: {
@@ -44,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const audioUrl = URL.createObjectURL(audioBlob);
             const audio = new Audio(audioUrl);
 
-            // Ocultar el estado de carga al iniciar el audio
+            // Mostrar el mensaje real al iniciar el audio
             audio.addEventListener("play", () => {
-                loadingOverlay.style.display = "none";
+                messageElement.textContent = message;
             });
 
             await new Promise(resolve => {
@@ -55,14 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } else {
             console.error("Error al generar la voz:", await response.text());
-            loadingOverlay.style.display = "none"; // Ocultar carga si hay error
+            messageElement.textContent = "Error al cargar el mensaje.";
         }
     }
 
     /**
      * Función para mostrar el mensaje en el chat.
      * @param {string} sender - Quién envió el mensaje (zakryo o user).
-     * @param {string} text - El contenido del mensaje.
+     * @param {string} text - El contenido inicial del mensaje.
+     * @returns {HTMLElement} - El elemento del mensaje en el DOM.
      */
     function addMessage(sender, text) {
         const messageDiv = document.createElement("div");
@@ -74,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.appendChild(messageContent);
         document.getElementById("chat-window").appendChild(messageDiv);
         document.getElementById("chat-window").scrollTop = document.getElementById("chat-window").scrollHeight; // Desplazar hacia abajo
+        return messageContent; // Retornar el elemento del mensaje para actualizarlo después
     }
 
     // Mensajes que se enviarán y reproducirán uno tras otro
@@ -87,8 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
     async function playMessages() {
         for (let i = 0; i < messages.length; i++) {
             const message = messages[i];
-            addMessage("zakryo", message); // Mostrar el mensaje en el chat
-            await playVoice(message, { stability: 0.5, similarity_boost: 0.75 }); // Reproducir el mensaje con Eleven Labs
+            const messageElement = addMessage("zakryo", ""); // Mostrar inicialmente un mensaje vacío
+            await playVoice(message, messageElement, { stability: 0.5, similarity_boost: 0.75 }); // Reproducir el mensaje con Eleven Labs
             await pause(2000); // Pausa de 2 segundos entre mensajes (ajustable)
         }
         // Cerrar la página después de que todos los mensajes se hayan reproducido

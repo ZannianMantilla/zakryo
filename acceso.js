@@ -1,4 +1,4 @@
-const elevenLabsApiKey = "sk_523a264e1da67056d640b6c24ebb01a3f3b44bf8c03202cf";
+const elevenLabsApiKey = "sk_13488429e5122e9b99164d79d05d009731689aa55697f48b";
 const voiceId = "15bJsujCI3tcDWeoZsQP"; // Verifica que esta voz sea compatible con español latino.
 
 /**
