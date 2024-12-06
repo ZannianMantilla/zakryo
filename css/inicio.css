@@ -1,0 +1,156 @@
+/* General */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #1e1e2f, #3a3a5e);
+    color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Contenedor Principal */
+.container {
+    text-align: center;
+    background: rgba(47, 47, 79, 0.9);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    animation: pop-up 0.8s ease-out;
+    width: 90%;
+    max-width: 400px;
+}
+
+/* Animaciones */
+@keyframes pop-up {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Título */
+h1 {
+    color: #9c27b0;
+    margin-bottom: 20px;
+    animation: fade-in 1.2s ease-in-out;
+    font-size: 2rem;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 12px;
+    width: 100%;
+    border: 2px solid #9c27b0;
+    border-radius: 5px;
+    background: #2f2f4f;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+input:focus {
+    border-color: #d05ce3;
+}
+
+button {
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #9c27b0, #d05ce3);
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #d05ce3, #9c27b0);
+    transform: translateY(-3px);
+}
+
+/* Footer */
+footer {
+    position: fixed;
+    bottom: 10px;
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* Media Queries - Responsivo */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .container {
+        width: 90%;
+        padding: 25px;
+    }
+
+    input, button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    input, button {
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    footer {
+        font-size: 10px;
+    }
+}
